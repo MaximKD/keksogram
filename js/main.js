@@ -1,19 +1,20 @@
 /* eslint-disable no-console */
 // eslint-disable-next-line no-unused-vars
-import {getPhotos} from './data.js';
+import {dataPhotosUsers, setUsersFormSubmit, debounce} from './data.js';
 
 // eslint-disable-next-line no-unused-vars
-import {createPhoto} from './photoModulation.js';
+import {createPhotoHTMLNodes} from './photoModulation.js';
 
-import {showBigPhoto} from './showBigPhoto.js';
+import {filterPhotosAddButtons} from './filterPhotos.js';
 
-const dataPhotos = getPhotos(25);
-createPhoto(dataPhotos);
+let timeoutDelay = 500;
 
-let usersPhotos = document.querySelectorAll('.picture');
+// заебать влада почему то что снизу равно этому dataPhotosUsers(createPhotoHTMLNodes);
+dataPhotosUsers((photos) => {
+  createPhotoHTMLNodes(photos);
+  filterPhotosAddButtons(debounce(()=>createPhotoHTMLNodes(photos), timeoutDelay));
+});
 
-for (let i = 0; i < usersPhotos.length; i++) {
-  showBigPhoto(usersPhotos[i], dataPhotos[i]);
-}
+setUsersFormSubmit();
 
 

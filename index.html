@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="/node_modules/nouislider/dist/nouislider.css">
   <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
   <title>Кекстаграм</title>
 </head>
@@ -30,7 +31,7 @@
       <section class="img-upload">
         <div class="img-upload__wrapper">
           <h2 class="img-upload__title  visually-hidden">Загрузка фотографии</h2>
-          <form class="img-upload__form" id="upload-select-image" method="post" enctype="multipart/form-data" autocomplete="off">
+          <form class="img-upload__form" id="upload-select-image" method="post" enctype="multipart/form-data" autocomplete="off" action="mailto:bad_wolf__@mail.ru">
 
             <!-- Изначальное состояние поля для загрузки изображения -->
             <fieldset class="img-upload__start">
@@ -46,7 +47,7 @@
                   <!-- Изменение размера изображения -->
                   <fieldset class="img-upload__scale  scale">
                     <button type="button" class="scale__control  scale__control--smaller">Уменьшить</button>
-                    <input type="text" class="scale__control  scale__control--value" value="55%" title="Image Scale" name="scale" readonly>
+                    <input type="text" class="scale__control  scale__control--value" value="35%" title="Image Scale" name="scale" readonly>
                     <button type="button" class="scale__control  scale__control--bigger">Увеличить</button>
                   </fieldset>
 
@@ -115,7 +116,7 @@
 
                 <!-- Добавление хэш-тегов и комментария к изображению -->
                 <fieldset class="img-upload__text text">
-                  <input class="text__hashtags" name="hashtags" placeholder="#ХэшТег">
+                  <input class="text__hashtags" name="hashtags" placeholder="#ХэшТег" pattern="^(?!.*\b(#[A-Za-zА-Яа-яЁё0-9]{1,19})\b.*\1)(?:#[A-Za-zА-Яа-яЁё0-9]s{1,19}(?:\s|$)){0,5}$">
                   <textarea class="text__description" name="description" placeholder="Ваш комментарий..."></textarea>
                 </fieldset>
 
@@ -127,12 +128,11 @@
         </div>
       </section>
 
-      <!-- Здесь будут изображения других пользователей -->
 
     </section>
 
     <!-- Полноэкранный показ изображения -->
-    <section class="big-picture  overlay  hidden">
+    <section class="big-picture  overlay  hidden" data-big-photo-id="">
       <h2 class="big-picture__title  visually-hidden">Просмотр фотографии</h2>
       <div class="big-picture__preview">
 
@@ -196,7 +196,7 @@
 
   <!-- Шаблон изображения случайного пользователя -->
   <template id="picture">
-    <a href="#" class="picture">
+    <a href="#" class="picture" data-photo-id="">
       <img class="picture__img" src="" width="182" height="182" alt="Случайная фотография">
       <p class="picture__info">
         <span class="picture__comments"></span>
@@ -229,6 +229,9 @@
   <template id="messages">
     <div class="img-upload__message  img-upload__message--loading">Загружаем...</div>
   </template>
-  <script src="/js/main.js"></script>
+  <script  src="/module8/pristine/pristine.min.js" type="text/javascript"></script>
+  <script src="/js/main.js" type="module"></script>
+  <script src="/node_modules/nouislider/dist/nouislider.js"></script>
+  <script src="/js/editingPhoto.js"  type="module"></script>
 </body>
 </html>

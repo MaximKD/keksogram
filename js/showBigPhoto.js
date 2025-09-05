@@ -10,60 +10,80 @@ let buttonClosePictute = windowPhoto.querySelector('.big-picture__cancel');
 let photoAlt = windowPhoto.querySelector('.social__caption');
 let socialCommentsList = document.querySelector('.social__comments');
 
+let comments = new Array();
+let commentsOpen = 0;
+
 let deleteSocialComments = () => {
   let socialComments = socialCommentsList.querySelectorAll('.social__comment');
   for (let socialComment of socialComments) {
     socialComment.remove();
-  };  // удаляю изначальные коментарии
+  }  // удаляю изначальные коментарии
+};
+
+let closePhotoClick = () => {
+  windowPhoto.classList.add('hidden');
+  body.classList.remove('modal-open');
+  deleteSocialComments();
+  commentsOpen = 0;
+  // buttonLoaderComments.removeEventListener('click', commentsAdd);
+};
+
+let closePhotoKeydown = (evt) => {
+  if (evt.keyCode === 27) {
+    windowPhoto.classList.add('hidden');
+    body.classList.remove('modal-open');
+    deleteSocialComments();
+    commentsOpen = 0;
+    // buttonLoaderComments.removeEventListener('click', commentsAdd);
+  }
+};
+
+//не могу разобраться как правильно убрать обработчик события
+let closeBigPhoto = () => {
+  buttonClosePictute.addEventListener('click', closePhotoClick);
+  document.addEventListener('keydown', closePhotoKeydown);
+}; // закрытие большой фотографии
+
+let getCommentUsers = (dataPhoto, offset, limit) => {
+  comments = dataPhoto.comments.slice(offset, limit);
+  comments.forEach((comment) => {
+    let socialComment = document.createElement('li');
+    socialComment.classList.add('social__comment');
+    let commentAvatar = document.createElement('img');
+    commentAvatar.classList.add('social__picture');
+    commentAvatar.src = comment.avatar;
+    commentAvatar.alt = comment.name;
+    socialComment.appendChild(commentAvatar);
+    let commentText = document.createElement('p');
+    commentText.classList.add('social__text');
+    commentText.textContent = comment.message;
+    socialComment.appendChild(commentText);
+    socialCommentsList.appendChild(socialComment);
+  });
+  commentsOpen = commentsOpen + comments.length;
+  commentsCount.textContent = `${commentsOpen} из ${commentsNumber.textContent = dataPhoto.comments.length} кoмментариев`; // временно
+}; //добавление коментариев
+
+
+
+
+let dataPhotoAdd = (dataPhoto, limit) => {
+  if (dataPhoto.comments.length <= limit) {
+    buttonLoaderComments.classList.add('hidden');
+  } else {
+    buttonLoaderComments.classList.remove('hidden');
+  }
+  deleteSocialComments();
+  body.classList.add('modal-open');
+  windowPhoto.classList.remove('hidden');
+  bigPhoto.src = dataPhoto.url;
+  likes.textContent = dataPhoto.likes;
+  photoAlt.textContent = dataPhoto.description;
 };
 
 
-let closeBigPhoto = () => {
-  buttonClosePictute.addEventListener('click', function () {
-    windowPhoto.classList.add('hidden');
-    body.classList.remove('modal-open');
-    let socialComments = socialCommentsList.querySelectorAll('.social__comment');
-  });
-  document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === 27) {
-      windowPhoto.classList.add('hidden');
-      body.classList.remove('modal-open');
-  }});
-} // закрытие большой фотографии
-  let getCommentUsers = () => {
-    dataPhoto.comments.forEach((comment) => {
-      let socialComment = document.createElement('li');
-      socialComment.classList.add('social__comment');
-      let commentAvatar = document.createElement('img');
-      commentAvatar.classList.add('social__picture');
-      commentAvatar.src = comment.avatar;
-      commentAvatar.alt = comment.name;
-      socialComment.appendChild(commentAvatar);
-      let commentText = document.createElement('p');
-      commentText.classList.add('social__text');
-      commentText.textContent = comment.message;
-      socialComment.appendChild(commentText);
-      socialCommentsList.appendChild(socialComment);
-  })
-} //добавление коментариев
-
-let showBigPhoto = (photo, dataPhoto) => {
-    photo.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    deleteSocialComments();
-    windowPhoto.classList.remove('hidden');
-    bigPhoto.src = dataPhoto.url;
-    likes.textContent = dataPhoto.likes;
-    photoAlt.textContent = dataPhoto.description;
-    commentsNumber.textContent = dataPhoto.comments.length;
-    commentsCount.classList.add('hidden'); // временно
-    buttonLoaderComments.classList.add('hidden'); // временно
-    body.classList.add('modal-open');
-    getCommentUsers()
-    closeBigPhoto();
-  });
-}; //открытие большой фотографии пользователя
 
 
-export {showBigPhoto};
+
+export {closeBigPhoto, getCommentUsers, dataPhotoAdd};
 
